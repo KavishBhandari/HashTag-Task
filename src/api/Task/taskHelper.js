@@ -15,75 +15,6 @@ class TaskHelper {
         return;
     }
 
-    getAllUsers1 = async (query) => {
-        const page = parseInt(query.page) || 1;
-        const limit = parseInt(query.limit) || 10;
-        const skip = (page - 1) * limit;
-
-        const pipeline = [
-            {
-                $lookup: {
-                    from: "useraddresses",
-                    localField: "_id",
-                    foreignField: "userId",
-                    as: "UserAddress"
-                }
-            },
-            {
-                $lookup: {
-                    from: "userprofiles",
-                    localField: "_id",
-                    foreignField: "userId",
-                    as: "UserProfile"
-                }
-            },
-        ];
-
-        if (query.search) {
-            pipeline.push({
-                $match: {
-                    $or: [
-                        { name: { $regex: query.search, $options: "i" } },
-                        { email: { $regex: query.search, $options: "i" } },
-                        { "UserAddress.city": { $regex: query.search, $options: "i" } }
-                    ]
-                }
-            });
-        }
-
-        if (query.sortBy) {
-            const sortOrder = query.sortOrder === "desc" ? -1 : 1;
-            pipeline.push({
-                $sort: { [query.sortBy]: sortOrder }
-            });
-        }
-
-        pipeline.push({
-            $facet: {
-                data: [{ $skip: skip }, { $limit: limit }],
-                totalCount: [{ $count: "count" }]
-            }
-        });
-
-        const result = await userModel.aggregate(pipeline);
-        console.log(" result ::::::::::::", result);
-        const users = result[0].data;
-        const total = result[0].totalCount[0]?.count || 0;
-        const totalPages = Math.ceil(total / limit);
-
-        return {
-            users,
-            pagination: {
-                TotalRecords: total,
-                TotalPages: totalPages,
-                CurrentPage: page,
-                NextPage: page < totalPages ? page + 1 : null
-            }
-        };
-        //return result;
-
-    };
-
     getTask = async (query) => {
         const page = parseInt(query.page) || 1;
         const limit = parseInt(query.limit) || 10;
@@ -95,7 +26,7 @@ class TaskHelper {
                     from: "projects",
                     localField: "projectId",
                     foreignField: "_id",
-                    as: "UserAddress"
+                    as: "ProjectTask"
                 }
             }
         ];
