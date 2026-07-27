@@ -4,7 +4,7 @@ const taskController = require("./taskController");
 
 const taskValidator = require("./taskvalidator");
 
-taskRoute.post("/tasks", taskValidator.createTaskValidation, taskController.createTask);
+taskRoute.post("/tasks", /*taskValidator.createTaskValidation,*/ taskController.createTask);
 
 taskRoute.put("/tasks/:id", taskValidator.updateTaskValidation, taskController.updateTask);
 

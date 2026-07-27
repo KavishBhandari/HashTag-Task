@@ -12,7 +12,7 @@ class TaskController {
                 "Task created successfully",
                 task,
             );
-        } catch {
+        } catch(error) {
             responseHelper.sendErrorResponse(
                 res,
                 error.statusCode ? error.statusCode : 500,
@@ -31,7 +31,7 @@ class TaskController {
                 "Task fetched successfully",
                 task,
             );
-        } catch {
+        } catch(error) {
             responseHelper.sendErrorResponse(
                 res,
                 error.statusCode ? error.statusCode : 500,
@@ -50,7 +50,7 @@ class TaskController {
                 "Task updated successfully",
                 task,
             );
-        } catch {
+        } catch(error) {
             responseHelper.sendErrorResponse(
                 res,
                 error.statusCode ? error.statusCode : 500,
@@ -69,7 +69,7 @@ class TaskController {
                 "Task deleted successfully",
                 task,
             );
-        } catch {
+        } catch(error) {
             responseHelper.sendErrorResponse(
                 res,
                 error.statusCode ? error.statusCode : 500,
