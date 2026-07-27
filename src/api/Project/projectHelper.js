@@ -1,6 +1,7 @@
 const Project = require("../../database/model/projectSchema");
 const dbHelper = require("../../helper/dbHelper");
 const ApiError = require("../../utils/apiError");
+const mongoose = require("mongoose");
 
 class ProjectHelper {
 
