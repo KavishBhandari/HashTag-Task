@@ -1,0 +1,9 @@
+.env
+node_modules
+.prettierrc
+.vscode
+public/files/*
+git-deploy/
+/sample.pdf
+/private_key.pem
+/public_key.pem
