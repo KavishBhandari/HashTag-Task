@@ -43,12 +43,12 @@ class TaskController {
 
     updateTask = async (req, res) => {
         try {
-            await taskHelper.updateTask(req.params.id, req.body);
+           const updatedTask =  await taskHelper.updateTask(req.params.id, req.body);
              responseHelper.sendSuccessResponse(
                 res,
                 200,
                 "Task updated successfully",
-                task,
+                updatedTask,
             );
         } catch(error) {
             responseHelper.sendErrorResponse(
@@ -67,7 +67,7 @@ class TaskController {
                 res,
                 200,
                 "Task deleted successfully",
-                task,
+                {},
             );
         } catch(error) {
             responseHelper.sendErrorResponse(
