@@ -1,50 +1,72 @@
+const ApiError = require("../utils/apiError");
+
 class DbHelper {
     createData = async (model, data, bulkCreate) => {
-        const responseData = bulkCreate
-            ? await model.insertMany(data)
-            : await model.create(data);
+        try {
+            const responseData = bulkCreate
+                ? await model.insertMany(data)
+                : await model.create(data);
 
-        return responseData;
+            return responseData;
+        } catch (error) {
+            throw new ApiError(500, error?.message ? error?.message : "INTERNAL SERVER ERROR");
+        }
+
     };
 
     getData = async (model, condition, findAll, attributes, populateFields = [], page = 1, limit = 10) => {
-        if (findAll) {
-            const options = {
-                page: parseInt(page) || 1,
-                limit: parseInt(limit) || 10,
-                select: attributes,
-                populate: populateFields
-            };
+        try {
+            if (findAll) {
+                const options = {
+                    page: parseInt(page) || 1,
+                    limit: parseInt(limit) || 10,
+                    select: attributes,
+                    populate: populateFields
+                };
 
-            const result = await model.paginate(condition, options);
+                const result = await model.paginate(condition, options);
 
-            return {
-                docs: result.docs,
-                pagination: {
-                    totalDocs: result.totalDocs,
-                    totalPages: result.totalPages,
-                    currentPage: result.page,
-                    nextPage: result.hasNextPage ? result.nextPage : null,
-                    prevPage: result.hasPrevPage ? result.prevPage : null,
-                    pageSize: result.limit
-                }
-            };
-        } else {
-            return await model.findOne(condition).select(attributes).populate(populateFields);
+                return {
+                    docs: result.docs,
+                    pagination: {
+                        totalDocs: result.totalDocs,
+                        totalPages: result.totalPages,
+                        currentPage: result.page,
+                        nextPage: result.hasNextPage ? result.nextPage : null,
+                        prevPage: result.hasPrevPage ? result.prevPage : null,
+                        pageSize: result.limit
+                    }
+                };
+            } else {
+                return await model.findOne(condition).select(attributes).populate(populateFields);
+            }
+        } catch (error) {
+            throw new ApiError(500, error?.message ? error?.message : "INTERNAL SERVER ERROR");
         }
+
     };
 
 
     updateData = async (model, condition, data) => {
-        return await model.findOneAndUpdate(
-            condition,
-            data,
-            { new: true }
-        );
+        try {
+            return await model.findOneAndUpdate(
+                condition,
+                data,
+                { new: true }
+            );
+        } catch (error) {
+            throw new ApiError(500, error?.message ? error?.message : "INTERNAL SERVER ERROR");
+        }
+
     };
 
     deleteData = async (model, condition) => {
-        return await model.findOneAndDelete(condition);
+        try {
+            return await model.findOneAndDelete(condition);
+        } catch (error) {
+            throw new ApiError(500, error?.message ? error?.message : "INTERNAL SERVER ERROR");
+        }
+
     };
 };
 
