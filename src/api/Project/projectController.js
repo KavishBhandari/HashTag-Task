@@ -13,6 +13,7 @@ class ProjectController {
                 project,
             );
         } catch (error) {
+            console.error("Error in createProject:", error);
             responseHelper.sendErrorResponse(
                 res,
                 error.statusCode ? error.statusCode : 500,
